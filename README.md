@@ -13,8 +13,6 @@ from ochoneycomb import HoneycombExporter
 
 exporter = HoneycombExporter(writekey=os.getenv("HONEYCOMB_WRITEKEY"), dataset=os.getenv("HONEYCOMB_DATASET"), service_name="test-app")
 
-# exporter = file_exporter.FileExporter(file_name='traces')
-
 # Initialize a tracer, by default using the `PrintExporter`
 tracer = tracer_module.Tracer(exporter=exporter)
 
