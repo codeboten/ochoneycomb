@@ -12,8 +12,6 @@ from opencensus.trace import tracer as tracer_module
 from ochoneycomb import HoneycombExporter
 
 exporter = HoneycombExporter(writekey=os.getenv("HONEYCOMB_WRITEKEY"), dataset=os.getenv("HONEYCOMB_DATASET"), service_name="test-app")
-
-# Initialize a tracer, by default using the `PrintExporter`
 tracer = tracer_module.Tracer(exporter=exporter)
 
 def do_something_to_trace():
