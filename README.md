@@ -2,35 +2,42 @@
 
 A simple exporter to translate OpenCensus span data into Honeycomb traces.
 
-## Usage
+## Example
 
 ```python
+import time
+import os
+
 from opencensus.trace import tracer as tracer_module
-from opencensus.trace.exporters import file_exporter
+from ochoneycomb import HoneycombExporter
 
-from opencensus.trace.exporters import honeycomb_exporter
+exporter = HoneycombExporter(writekey=os.getenv("HONEYCOMB_WRITEKEY"), dataset=os.getenv("HONEYCOMB_DATASET"), service_name="test-app")
 
-exporter = honeycomb_exporter.HoneycombExporter(writekey="REDACTED", dataset="dataset", service_name="test-app")
+# exporter = file_exporter.FileExporter(file_name='traces')
 
+# Initialize a tracer, by default using the `PrintExporter`
 tracer = tracer_module.Tracer(exporter=exporter)
+
+def do_something_to_trace():
+    time.sleep(1)
 
 # Example for creating nested spans
 with tracer.span(name='span1') as span1:
     do_something_to_trace()
     with tracer.span(name='span1_child1') as span1_child1:
-        span1_child1.add_annotation("great annotation")
+        span1_child1.add_annotation("something")
         do_something_to_trace()
+    with tracer.span(name='span1_child2') as span1_child2:
+        do_something_to_trace()
+with tracer.span(name='span2') as span2:
+    do_something_to_trace()
 
 ```
 
-## Example
-
-Currently there's no easy way to install this. Will get this sorted out sooner than later. For now, you can clone the repo and copy the exporter to the `opencensus/trace/exporters` directory where your Python libraries are.
+## Install
 
 ```bash
-git clone https://github.com/codeboten/opencensus-python-honeycomb-exporter
-cd opencensus-python-honeycomb-exporter
-HONEYCOMB_WRITEKEY=XXXXXX HONEYCOMB_DATASET=test-data-set python example.py
+pip install ochoneycomb
 ```
 
 ## Requirements
